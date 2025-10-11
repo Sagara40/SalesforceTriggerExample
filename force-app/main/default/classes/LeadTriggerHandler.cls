@@ -14,7 +14,7 @@ public with sharing class LeadTriggerHandler {
     //If Industry = Healthcare: 
     //Set Lead Source to Purchased List 
     //Set SIC Code to 700 
-    //Set Primary (custom field) to Yes
+    //Set Primaryz to Yes
 
     public static void updateLeadBasedOnLeadSource(List<Lead> leadList) {
         for(Lead led : leadList) {
