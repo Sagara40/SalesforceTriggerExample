@@ -2,4 +2,7 @@ trigger LeadTrigger on Lead (before insert, before update, after insert, after u
     if(trigger.isBefore && trigger.isUpdate) {
         LeadTriggerHandler.setLeadStatusToWorkingContacted(trigger.new);
     }
+    if(trigger.isBefore && (trigger.isInsert || trigger.isUpdate)) {
+        LeadTriggerHandler.updateLeadBasedOnLeadSource(trigger.new);
+    }
 }
