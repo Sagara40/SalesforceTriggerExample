@@ -25,4 +25,25 @@ public with sharing class LeadTriggerHandler {
             }
         }
     }
+
+    //Whenever a Lead record is created, automatically create a Task for the Lead Owner with:
+    //Subject: Follow Up with Customer
+    //priority: High
+    //Status: Not Started
+
+    public static void createTaskOnLeadCreation(List<Lead> leadList) {
+        List<Task> taskList = new List<Task>();
+        for(Lead lead : leadList) {
+            taskList.add(new Task(
+                Subject = 'Follow Up with Customer',
+                Priority = 'High',
+                Status = 'Not Started',
+                WhoId = lead.Id,
+                OwnerId = lead.OwnerId
+            ));
+        }
+        if(!taskList.isEmpty()) {
+            insert taskList;
+        }
+    } 
 }

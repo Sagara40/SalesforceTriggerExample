@@ -5,4 +5,7 @@ trigger LeadTrigger on Lead (before insert, before update, after insert, after u
     if(trigger.isBefore && (trigger.isInsert || trigger.isUpdate)) {
         LeadTriggerHandler.updateLeadBasedOnLeadSource(trigger.new);
     }
+    if(trigger.isAfter && trigger.isInsert) {
+        LeadTriggerHandler.createTaskOnLeadCreation(trigger.new);
+    }
 }
