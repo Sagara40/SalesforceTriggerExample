@@ -29,4 +29,14 @@ public with sharing class OpportunityTriggerHandler {
             insert taskList;
         }
     }
+    //Whenever an Opportunity Stage is modified, automatically update the Opportunity Amount field based on the calculation:
+    //Amount = Probability x Expected Revenue
+    public static void updateAmountBasedOnProbabilityAndExpectedRevenue(List<Opportunity> newList, Map<Id, Opportunity> oldMap) {
+        for (Opportunity opp : newList) {
+            Opportunity oldOpp = oldMap.get(opp.Id);
+            if (opp.StageName != oldOpp.StageName) {
+                opp.Amount = opp.Probability * opp.ExpectedRevenue;
+            }
+        }
+    }
 }

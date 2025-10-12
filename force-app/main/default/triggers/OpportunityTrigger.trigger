@@ -2,4 +2,7 @@ trigger OpportunityTrigger on Opportunity (before insert,before update, after in
     if(trigger.isAfter && trigger.isUpdate) {
         OpportunityTriggerHandler.createTaskOnClosedWon(trigger.new, trigger.oldMap);
     }
+    if(trigger.isBefore && trigger.isUpdate) {
+        OpportunityTriggerHandler.updateAmountBasedOnProbabilityAndExpectedRevenue(trigger.new, trigger.oldMap);
+    }
 }
