@@ -3,4 +3,7 @@ trigger AccountTrigger on Account (before insert, before update, after insert, a
     if(trigger.isBefore && (trigger.isInsert || trigger.isUpdate)) {
         AccountTriggerHandler.preventAccountCreationWithPrivateOwnership(trigger.new);
     }
+    if(trigger.isAfter && trigger.isUpdate) {
+        AccountTriggerHandler.updateWebsiteOnRelatedContacts(trigger.new, trigger.oldMap);
+    }
 }

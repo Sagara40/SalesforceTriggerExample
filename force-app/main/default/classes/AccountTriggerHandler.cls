@@ -16,4 +16,25 @@ public with sharing class AccountTriggerHandler {
             }
         }
     }
+
+    //Whenever an Account’s Website field is updated, 
+    //automatically update the Website field on 
+    //all related child Contacts to match the new Account website.
+
+    public static void updateWebsiteOnRelatedContacts(List<Account> AccountList, Map<Id, Account> oldMap) {
+        Map<Id,String> accoountToWebsiteMap = new Map<Id,String>();
+        for(Account acc : AccountList) {
+            if(acc.Website != null && acc.Website != oldMap.get(acc.Id).Website ) {
+                accoountToWebsiteMap.put(acc.Id,acc.Website);
+            }
+        }
+        List<Contact> contactList = [SELECT Id, AccountId, Website__c FROM Contact WHERE AccountId IN :accoountToWebsiteMap.keySet()];
+
+        for(Contact con : contactList) {
+            con.Website__c = accoountToWebsiteMap.get(con.AccountId);
+        }
+        if(!contactList.isEmpty()) {
+            update contactList;
+        }
+    }
 }
