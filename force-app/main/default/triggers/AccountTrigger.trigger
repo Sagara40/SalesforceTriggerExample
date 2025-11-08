@@ -6,4 +6,7 @@ trigger AccountTrigger on Account (before insert, before update, after insert, a
     if(trigger.isAfter && trigger.isUpdate) {
         AccountTriggerHandler.updateWebsiteOnRelatedContacts(trigger.new, trigger.oldMap);
     }
+    if(trigger.isAfter && trigger.isInsert) {
+        AccountTriggerHandler.createContactsOnAccountCreation(trigger.new);
+    }
 }

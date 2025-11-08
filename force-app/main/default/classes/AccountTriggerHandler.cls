@@ -37,4 +37,25 @@ public with sharing class AccountTriggerHandler {
             update contactList;
         }
     }
+    //Whenever a new Account record is created and the Number of Locations field is filled with a value (e.g., 10):
+    //Automatically create that many Contact records (e.g., 10 Contacts)
+    //Associate all newly created Contacts with the same Account
+
+    public static void createContactsOnAccountCreation(List<Account> accountList) {
+        List<Contact> contactList = new List<Contact>();
+        for(Account acc : accountList) {
+            if(acc.NumberOfLocations__c != null) {
+                for(Integer i = 0; i < acc.NumberOfLocations__c; i++) {
+                    contactList.add(new Contact(
+                        FirstName = 'Contact ' + (i+1),
+                        LastName = 'Contact ' + (i+1),
+                        AccountId = acc.Id
+                    ));
+                }
+            }
+        }
+        if(!contactList.isEmpty()) {
+            insert contactList;
+        }
+    }
 }
