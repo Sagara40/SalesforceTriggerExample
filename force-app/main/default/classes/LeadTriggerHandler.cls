@@ -46,4 +46,16 @@ public with sharing class LeadTriggerHandler {
             insert taskList;
         }
     } 
+    //Whenever a user attempts to delete a Lead record, check if:
+    //Status = ‘Worked - Contacted’
+    //If this condition is true, prevent the deletion of the record by adding an error message to ensure that 
+    //important leads with this status remain in the CRM system for tracking, reporting, and follow-ups.
+
+    public static void preventLeadDeletion(List<Lead> leadList) {
+        for(Lead lead : leadList) {
+            if(lead.Status == 'Working - Contacted') {
+                lead.addError('Cannot delete lead with status Working - Contacted');
+            }
+        }
+    }
 }
