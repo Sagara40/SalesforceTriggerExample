@@ -3,4 +3,7 @@ trigger ContactTrigger on Contact (before insert, before update, after insert, a
     if(trigger.isBefore && (trigger.isInsert || trigger.isUpdate)) {
         ContactTrigger_Handler.preventContactCreationWithoutParentAccount(trigger.new);
     }
+    if(trigger.isBefore && (trigger.isUpdate || trigger.isInsert)) {
+        ContactTrigger_Handler.preventDuplicateContactCreation(trigger.new);
+    }
 }
