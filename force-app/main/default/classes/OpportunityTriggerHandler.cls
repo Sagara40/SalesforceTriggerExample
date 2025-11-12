@@ -39,4 +39,34 @@ public with sharing class OpportunityTriggerHandler {
             }
         }
     }
+
+    //Whenever an Opportunity record is deleted, automatically:
+    //Create a Task for the Opportunity’s related Account Owner
+    //The task should instruct them to investigate why the Opportunity was deleted and submit the information
+
+    public static void createTaskOnOpportunityDeletion(List<Opportunity> oldList) {
+        Set<Id> accountIds = new Set<Id>();
+        Map<Id,Id> accountToOwnerIdMap = new Map<Id,Id>();
+        for (Opportunity opp : oldList) {
+            if(opp.AccountId != null) {
+             accountIds.add(opp.AccountId);
+            }           
+        }
+        List<Task> taskList = new List<Task>();
+        for (Account acc : [SELECT Id, OwnerId FROM Account WHERE Id IN :accountIds]) {
+            accountToOwnerIdMap.put(acc.Id,acc.OwnerId);
+        }
+        for(Id ids:accountIds){
+            taskList.add(new Task(
+                WhatId = ids,
+                OwnerId = accountToOwnerIdMap.get(ids),
+                Subject = 'Investigate Opportunity Deletion',
+                Priority = 'High',
+                Status = 'Not Started'
+            ));
+        }
+        if (!taskList.isEmpty()) {  
+            insert taskList;
+        }
+    }
 }
