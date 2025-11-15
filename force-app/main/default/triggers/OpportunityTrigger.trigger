@@ -3,9 +3,12 @@ trigger OpportunityTrigger on Opportunity (before insert,before update, after in
         OpportunityTriggerHandler.createTaskOnClosedWon(trigger.new, trigger.oldMap);
     }
     if(trigger.isBefore && trigger.isUpdate) {
-        OpportunityTriggerHandler.updateAmountBasedOnProbabilityAndExpectedRevenue(trigger.new, trigger.oldMap);
+       OpportunityTriggerHandler.updateAmountBasedOnProbabilityAndExpectedRevenue(trigger.new, trigger.oldMap);
     }
     if(trigger.isAfter && trigger.isDelete) {
         OpportunityTriggerHandler.createTaskOnOpportunityDeletion(trigger.old);
+    }
+    if(trigger.isAfter && trigger.isUpdate) {
+        OpportunityTriggerHandler.removeOpportunityTeamMembersOnClosedLost(trigger.new, trigger.oldMap);
     }
 }

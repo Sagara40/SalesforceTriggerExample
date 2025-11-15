@@ -69,4 +69,23 @@ public with sharing class OpportunityTriggerHandler {
             insert taskList;
         }
     }
+
+    //Whenever an Opportunity’s Stage is updated to Closed Lost, automatically:
+    //Remove all Opportunity Team Members associated with that Opportunity
+    public static void removeOpportunityTeamMembersOnClosedLost(List<Opportunity> newList, Map<Id, Opportunity> oldMap) {
+        Set<Id> opportunityIds = new Set<Id>();
+        for (Opportunity opp : newList) {
+            Opportunity oldOpp = oldMap.get(opp.Id);
+            if (opp.StageName == 'Closed Lost' && oldOpp.StageName != 'Closed Lost') {
+                opportunityIds.add(opp.Id);
+            }
+
+        }
+        List<OpportunityTeamMember> opportunityTeamMemberList = [SELECT Id FROM OpportunityTeamMember
+                            WHERE OpportunityId IN :opportunityIds];
+        if (!opportunityTeamMemberList.isEmpty()) {
+            delete opportunityTeamMemberList;
+        }
+
+    }
 }
