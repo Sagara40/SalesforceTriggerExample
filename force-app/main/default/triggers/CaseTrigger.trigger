@@ -4,6 +4,6 @@ trigger CaseTrigger on Case (before insert, before update, after insert, after u
         CaseTriggerHandler.updateCasePriorityDependonOrigin(trigger.new);
     }
     if(trigger.isBefore && trigger.isDelete) {
-        CaseTriggerHandler.preventCaseDeletion(trigger.new);
+        CaseTriggerHandler.preventCaseDeletion(trigger.old);
     }
 }
