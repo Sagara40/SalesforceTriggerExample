@@ -15,7 +15,9 @@ public with sharing class ContactTrigger_Handler {
     }
 
     //Whenever a new Contact record is being created, check if there already exists a Contact with the same:
-    //Last Name || Email || Phone
+    //Last Name
+    //Email
+    //Phone
     public static void preventDuplicateContactCreation(List<Contact> contactList) {
         Set<String> lastNameSet = new Set<String>();
         Set<String> emailSet = new Set<String>();
